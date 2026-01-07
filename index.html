@@ -4,559 +4,266 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BBC Data Search System</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <i class="fas fa-database"></i>
-                <span>Multiple User ID records</span>
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo-area">
+                    <div class="logo-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="title-area">
+                        <h1>BBC Data Search System</h1>
+                        <p>Find multiple User IDs associated with a single number quickly and efficiently.</p>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="header-search">
+                        <div class="search-box-header">
+                            <input type="text" id="headerSearchInput" placeholder="Search by number or User ID...">
+                            <button id="headerSearchBtn" class="search-btn-header">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="header-upload">
+                        <button id="headerUploadBtn" class="upload-btn-header">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Upload Data</span>
+                        </button>
+                        <input type="file" id="headerFileUpload" accept=".csv,.xlsx,.xls" style="display: none;">
+                    </div>
+                </div>
             </div>
-            <div class="nav-controls">
-                <button id="themeToggle" class="nav-btn">
-                    <i class="fas fa-moon"></i>
+            
+            <div class="file-info-header" id="headerFileInfo" style="display: none;">
+                <div class="file-info-content">
+                    <i class="fas fa-file-excel"></i>
+                    <span id="headerFileName">No file uploaded</span>
+                    <span id="headerRecordCount" class="record-count-header">0 records</span>
+                    <button id="headerClearFileBtn" class="clear-file-btn-header">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="dashboard">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #4caf50;">
+                        <i class="fas fa-list-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="totalRecords">0</h3>
+                        <p class="stat-label">TOTAL RECORDS</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #2196f3;">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="activeUsers">0</h3>
+                        <p class="stat-label">ACTIVE USERS</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #ff9800;">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="totalBranches">0</h3>
+                        <p class="stat-label">BRANCHES</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="main-search-section">
+            <div class="search-header">
+                <h2><i class="fas fa-search"></i> Search Your Data</h2>
+                <p>Use the search box in the header or the advanced search options below</p>
+            </div>
+            
+            <div class="search-options-container">
+                <div class="search-type-selector">
+                    <h4><i class="fas fa-filter"></i> Search Type</h4>
+                    <div class="search-type-options">
+                        <label class="search-type-option">
+                            <input type="radio" name="searchType" value="all" checked>
+                            <div class="option-content">
+                                <i class="fas fa-search"></i>
+                                <span>Search All Fields</span>
+                            </div>
+                        </label>
+                        
+                        <label class="search-type-option">
+                            <input type="radio" name="searchType" value="number">
+                            <div class="option-content">
+                                <i class="fas fa-phone"></i>
+                                <span>Phone Number Only</span>
+                            </div>
+                        </label>
+                        
+                        <label class="search-type-option">
+                            <input type="radio" name="searchType" value="userid">
+                            <div class="option-content">
+                                <i class="fas fa-id-card"></i>
+                                <span>User ID Only</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="quick-search-tags">
+                    <h4><i class="fas fa-bolt"></i> Quick Search</h4>
+                    <p>Click any tag to search instantly</p>
+                    <div class="tags-container">
+                        <span class="search-tag" data-search="91600000000">91600000000</span>
+                        <span class="search-tag" data-search="91777777777">91777777777</span>
+                        <span class="search-tag" data-search="91888888888">91888888888</span>
+                        <span class="search-tag" data-search="bbc1234">bbc1234</span>
+                        <span class="search-tag" data-search="bbc5678">bbc5678</span>
+                        <span class="search-tag" data-search="bbc9012">bbc9012</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="search-instructions">
+                <div class="instruction">
+                    <i class="fas fa-upload"></i>
+                    <div>
+                        <h5>Step 1: Upload Data</h5>
+                        <p>Click "Upload Data" in the header to upload your CSV or Excel file</p>
+                    </div>
+                </div>
+                <div class="instruction">
+                    <i class="fas fa-search"></i>
+                    <div>
+                        <h5>Step 2: Search Data</h5>
+                        <p>Use the search box in the header or quick tags above</p>
+                    </div>
+                </div>
+                <div class="instruction">
+                    <i class="fas fa-download"></i>
+                    <div>
+                        <h5>Step 3: Export Results</h5>
+                        <p>Export your search results as CSV for further analysis</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="results-section">
+            <div class="results-header">
+                <h3><i class="fas fa-poll"></i> Search Results</h3>
+                <div class="results-count">
+                    <span class="count-badge">0</span>
+                    <span>RESULTS FOUND</span>
+                </div>
+            </div>
+            
+            <div class="results-table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>UserID</th>
+                            <th>Number</th>
+                            <th>Branch</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTableBody">
+                        <!-- Results will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+                
+                <div class="no-results" id="noResultsMessage">
+                    <i class="fas fa-search"></i>
+                    <p id="noResultsText">Upload a CSV/Excel file and search for data</p>
+                </div>
+            </div>
+            
+            <div class="results-actions">
+                <button class="action-btn export-btn">
+                    <i class="fas fa-file-export"></i> Export Results
                 </button>
-                <button id="helpBtn" class="nav-btn">
-                    <i class="fas fa-question-circle"></i>
+                <button class="action-btn clear-btn">
+                    <i class="fas fa-eraser"></i> Clear Results
+                </button>
+                <button class="action-btn refresh-btn" id="refreshSearchBtn">
+                    <i class="fas fa-redo"></i> Refresh Search
                 </button>
             </div>
-        </div>
-    </nav>
-
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    <span class="gradient-text">A single number may be associated with multiple User IDs. You can find them here.</span>
-                </h1>
-                <div class="hero-stats">
-                    <div class="stat-badge">
-                        <i class="fas fa-bolt"></i>
-                        <span>Real-time Search</span>
-                    </div>
-                    <div class="stat-badge">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Local Processing</span>
-                    </div>
-                    <div class="stat-badge">
-                        <i class="fas fa-download"></i>
-                        <span>Export Results</span>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-graphic">
-                <div class="graphic-circle"></div>
-                <div class="graphic-circle"></div>
-                <div class="graphic-circle"></div>
-            </div>
         </section>
-
-        <!-- Data Loader Section -->
-        <section class="loader-section">
-            <div class="section-card">
-                <div class="section-header">
-                    <div class="header-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                    </div>
-                    <div class="header-content">
-                        <h2>Load Your Data</h2>
-                        <p>Upload your CSV file or use the sample data to get started</p>
-                    </div>
-                </div>
-
-                <div class="loader-options">
-                    <!-- Auto Load Option -->
-                    <div class="option-card active" id="autoLoadCard">
-                        <div class="option-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <div class="option-content">
-                            <h3>Auto Load BBC Data</h3>
-                            <p>Automatically loads <strong>bbc.csv</strong> from the same folder</p>
-                            <div class="option-status">
-                                <span class="status-indicator loading" id="autoStatus"></span>
-                                <span id="autoStatusText">Click to load</span>
-                            </div>
-                        </div>
-                        <button class="option-btn primary" id="autoLoadBtn">
-                            <i class="fas fa-play"></i> Load Now
-                        </button>
-                    </div>
-
-                    <!-- File Upload Option -->
-                    <div class="option-card" id="uploadCard">
-                        <div class="option-icon">
-                            <i class="fas fa-file-upload"></i>
-                        </div>
-                        <div class="option-content">
-                            <h3>Upload Custom CSV</h3>
-                            <p>Upload your own CSV file with UserID, Number, Branch, Status columns</p>
-                            <div class="option-status">
-                                <span class="status-indicator idle" id="uploadStatus"></span>
-                                <span id="uploadStatusText">Ready for upload</span>
-                            </div>
-                        </div>
-                        <div class="option-actions">
-                            <button class="option-btn secondary" id="browseBtn">
-                                <i class="fas fa-folder-open"></i> Browse
-                            </button>
-                            <input type="file" id="csvFile" accept=".csv" style="display: none;">
-                        </div>
-                    </div>
-
-                    <!-- Sample Data Option -->
-                    <div class="option-card" id="sampleCard">
-                        <div class="option-icon">
-                            <i class="fas fa-vial"></i>
-                        </div>
-                        <div class="option-content">
-                            <h3>Use Sample Data</h3>
-                            <p>Try the system with sample data to see how it works</p>
-                            <div class="option-status">
-                                <span class="status-indicator idle" id="sampleStatus"></span>
-                                <span id="sampleStatusText">Ready</span>
-                            </div>
-                        </div>
-                        <button class="option-btn tertiary" id="sampleBtn">
-                            <i class="fas fa-magic"></i> Load Sample
-                        </button>
-                    </div>
-                </div>
-
-                <!-- File Preview -->
-                <div class="file-preview" id="filePreview" style="display: none;">
-                    <div class="preview-header">
-                        <h4><i class="fas fa-file-alt"></i> Loaded File Preview</h4>
-                        <div class="file-meta">
-                            <span id="fileName">bbc.csv</span>
-                            <span class="file-size" id="fileSize">• 2.4 KB</span>
-                            <span class="file-records" id="fileRecords">• 250 records</span>
-                        </div>
-                    </div>
-                    <div class="preview-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>UserID</th>
-                                    <th>Number</th>
-                                    <th>Branch</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="previewBody">
-                                <!-- Preview rows will be added here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        
+        <section class="sample-data-section">
+            <div class="sample-header">
+                <h3><i class="fas fa-download"></i> Need Sample Data?</h3>
+                <p>Download this sample CSV file to see the correct format for uploading</p>
             </div>
-        </section>
-
-        <!-- Search Interface (Initially Hidden) -->
-        <section class="search-section" id="searchSection" style="display: none;">
-            <div class="section-card">
-                <div class="section-header">
-                    <div class="header-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="header-content">
-                        <h2>Search & Filter Data</h2>
-                        <p>Search by multiple UserIDs, single ID, or phone numbers</p>
-                    </div>
-                </div>
-
-                <!-- Search Tabs -->
-                <div class="search-tabs">
-                    <div class="tab-nav">
-                        <button class="tab-btn active" data-tab="multiple">
-                            <i class="fas fa-users"></i>
-                            <span>Multiple IDs</span>
-                            <span class="tab-badge" id="multipleCount">0</span>
-                        </button>
-                        <button class="tab-btn" data-tab="single">
-                            <i class="fas fa-user"></i>
-                            <span>Single ID</span>
-                        </button>
-                        <button class="tab-btn" data-tab="number">
-                            <i class="fas fa-hashtag"></i>
-                            <span>By Number</span>
-                        </button>
-                        <button class="tab-btn" data-tab="advanced">
-                            <i class="fas fa-sliders-h"></i>
-                            <span>Advanced</span>
-                        </button>
-                    </div>
-
-                    <!-- Tab Contents -->
-                    <div class="tab-content active" id="multiple-tab">
-                        <div class="tab-content-header">
-                            <h3><i class="fas fa-list-ol"></i> Search Multiple UserIDs</h3>
-                            <p class="tab-hint">Enter multiple UserIDs separated by commas, spaces, or new lines</p>
+            <div class="sample-actions">
+                <button id="downloadSampleBtn" class="sample-btn">
+                    <i class="fas fa-file-csv"></i> Download Sample CSV
+                </button>
+                <div class="format-info">
+                    <h4>Required Format:</h4>
+                    <div class="format-preview">
+                        <div class="format-row">
+                            <span class="format-col">UserID</span>
+                            <span class="format-col">Number</span>
+                            <span class="format-col">Branch</span>
+                            <span class="format-col">Status</span>
                         </div>
-                        <div class="search-input-group">
-                            <div class="input-wrapper">
-                                <textarea id="multipleUserIds" 
-                                          placeholder="Example: 
-USER001, USER002, USER003
-USER004 USER005 USER006
-USER007,USER008,USER009"></textarea>
-                                <div class="input-actions">
-                                    <button class="input-action-btn" id="pasteIds">
-                                        <i class="fas fa-paste"></i> Paste
-                                    </button>
-                                    <button class="input-action-btn" id="clearIds">
-                                        <i class="fas fa-eraser"></i> Clear
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="input-stats">
-                                <div class="stat-item">
-                                    <span class="stat-label">IDs Entered:</span>
-                                    <span class="stat-value" id="idCount">0</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Valid Format:</span>
-                                    <span class="stat-value valid" id="formatStatus">✓</span>
-                                </div>
-                            </div>
+                        <div class="format-row data-row">
+                            <span class="format-col">bbc1234</span>
+                            <span class="format-col">91600000000</span>
+                            <span class="format-col">Mumbai Central</span>
+                            <span class="format-col">Active</span>
                         </div>
-                    </div>
-
-                    <div class="tab-content" id="single-tab">
-                        <div class="tab-content-header">
-                            <h3><i class="fas fa-user-circle"></i> Search Single UserID</h3>
-                            <p class="tab-hint">Enter one specific UserID to find exact matches</p>
-                        </div>
-                        <div class="search-input-group single">
-                            <div class="input-wrapper">
-                                <input type="text" id="singleUserId" placeholder="Enter UserID (e.g., USER001)">
-                                <div class="input-suggestions" id="singleSuggestions">
-                                    <!-- Suggestions will appear here -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="number-tab">
-                        <div class="tab-content-header">
-                            <h3><i class="fas fa-hashtag"></i> Search by Number</h3>
-                            <p class="tab-hint">Search by phone number or any numerical identifier</p>
-                        </div>
-                        <div class="search-input-group">
-                            <div class="input-wrapper">
-                                <input type="text" id="searchNumber" placeholder="Enter number (e.g., 12345)">
-                                <div class="input-help">
-                                    <i class="fas fa-info-circle"></i>
-                                    <span>Supports partial matches (e.g., "123" matches "12345")</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="advanced-tab">
-                        <div class="tab-content-header">
-                            <h3><i class="fas fa-sliders-h"></i> Advanced Search</h3>
-                            <p class="tab-hint">Combine multiple criteria for precise filtering</p>
-                        </div>
-                        <div class="advanced-filters">
-                            <div class="filter-row">
-                                <div class="filter-group">
-                                    <label for="branchFilter">
-                                        <i class="fas fa-code-branch"></i> Branch
-                                    </label>
-                                    <select id="branchFilter" class="filter-select">
-                                        <option value="">All Branches</option>
-                                    </select>
-                                </div>
-                                <div class="filter-group">
-                                    <label for="statusFilter">
-                                        <i class="fas fa-circle"></i> Status
-                                    </label>
-                                    <select id="statusFilter" class="filter-select">
-                                        <option value="">All Status</option>
-                                        <option value="active">Active Only</option>
-                                        <option value="inactive">Inactive Only</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="filter-row">
-                                <div class="filter-group">
-                                    <label for="sortBy">
-                                        <i class="fas fa-sort-amount-down"></i> Sort By
-                                    </label>
-                                    <select id="sortBy" class="filter-select">
-                                        <option value="userid">UserID (A-Z)</option>
-                                        <option value="userid-desc">UserID (Z-A)</option>
-                                        <option value="number">Number</option>
-                                        <option value="branch">Branch</option>
-                                        <option value="status">Status</option>
-                                    </select>
-                                </div>
-                                <div class="filter-group">
-                                    <label for="resultsPerPage">
-                                        <i class="fas fa-list-ol"></i> Results Per Page
-                                    </label>
-                                    <select id="resultsPerPage" class="filter-select">
-                                        <option value="10">10</option>
-                                        <option value="25" selected>25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                        <option value="all">All</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Search Actions -->
-                    <div class="search-actions">
-                        <button class="search-btn primary" id="searchBtn">
-                            <i class="fas fa-search"></i>
-                            <span>Search Data</span>
-                            <div class="search-loader" id="searchLoader"></div>
-                        </button>
-                        <button class="search-btn secondary" id="resetBtn">
-                            <i class="fas fa-redo"></i>
-                            <span>Reset Filters</span>
-                        </button>
-                        <button class="search-btn success" id="exportBtn">
-                            <i class="fas fa-download"></i>
-                            <span>Export Results</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Results Dashboard -->
-        <section class="dashboard-section" id="dashboardSection" style="display: none;">
-            <div class="section-card">
-                <div class="section-header">
-                    <div class="header-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <div class="header-content">
-                        <h2>Search Results Dashboard</h2>
-                        <p id="resultsSummary">No search performed yet</p>
-                    </div>
-                    <div class="header-actions">
-                        <button class="header-btn" id="refreshResults">
-                            <i class="fas fa-sync-alt"></i> Refresh
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Stats Cards -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon total">
-                            <i class="fas fa-database"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Total Records</h3>
-                            <p class="stat-number" id="totalRecords">0</p>
-                            <p class="stat-trend">Loaded from CSV</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon matched">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Matched Results</h3>
-                            <p class="stat-number" id="matchedResults">0</p>
-                            <p class="stat-trend" id="matchPercent">0% of total</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon active">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Active Users</h3>
-                            <p class="stat-number" id="activeUsers">0</p>
-                            <p class="stat-trend" id="activePercent">0% active</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon branches">
-                            <i class="fas fa-code-branch"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Unique Branches</h3>
-                            <p class="stat-number" id="uniqueBranches">0</p>
-                            <p class="stat-trend" id="topBranch">-</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Results Table -->
-                <div class="results-container">
-                    <div class="results-header">
-                        <h3><i class="fas fa-table"></i> Search Results</h3>
-                        <div class="results-controls">
-                            <div class="results-info">
-                                Showing <span id="showingStart">1</span>-<span id="showingEnd">10</span> of 
-                                <span id="totalResults">0</span> records
-                            </div>
-                            <div class="pagination">
-                                <button class="page-btn" id="prevPage" disabled>
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <span class="page-info">
-                                    Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
-                                </span>
-                                <button class="page-btn" id="nextPage" disabled>
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="table-wrapper">
-                        <table class="data-table" id="dataTable">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-sort="userid">
-                                        <div class="th-content">
-                                            <i class="fas fa-id-card"></i>
-                                            <span>UserID</span>
-                                            <i class="fas fa-sort"></i>
-                                        </div>
-                                    </th>
-                                    <th class="sortable" data-sort="number">
-                                        <div class="th-content">
-                                            <i class="fas fa-hashtag"></i>
-                                            <span>Number</span>
-                                            <i class="fas fa-sort"></i>
-                                        </div>
-                                    </th>
-                                    <th class="sortable" data-sort="branch">
-                                        <div class="th-content">
-                                            <i class="fas fa-code-branch"></i>
-                                            <span>Branch</span>
-                                            <i class="fas fa-sort"></i>
-                                        </div>
-                                    </th>
-                                    <th class="sortable" data-sort="status">
-                                        <div class="th-content">
-                                            <i class="fas fa-circle"></i>
-                                            <span>Status</span>
-                                            <i class="fas fa-sort"></i>
-                                        </div>
-                                    </th>
-                                    <th class="actions-col">
-                                        <div class="th-content">
-                                            <i class="fas fa-cog"></i>
-                                            <span>Actions</span>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody">
-                                <!-- Data will be loaded here -->
-                                <tr class="empty-row">
-                                    <td colspan="5">
-                                        <div class="empty-state">
-                                            <i class="fas fa-search"></i>
-                                            <h4>No Data Loaded</h4>
-                                            <p>Upload a CSV file or use sample data to get started</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Table Footer -->
-                    <div class="table-footer">
-                        <div class="footer-actions">
-                            <button class="footer-btn" onclick="copyTable()">
-                                <i class="fas fa-copy"></i> Copy Selected
-                            </button>
-                            <button class="footer-btn" onclick="printTable()">
-                                <i class="fas fa-print"></i> Print Table
-                            </button>
-                        </div>
-                        <div class="footer-info">
-                            <span><i class="fas fa-clock"></i> Last updated: <span id="lastUpdated">Just now</span></span>
+                        <div class="format-row data-row">
+                            <span class="format-col">bbc1235</span>
+                            <span class="format-col">91600000000</span>
+                            <span class="format-col">Delhi North</span>
+                            <span class="format-col">Active</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+    </main>
 
-        <!-- Quick Actions Panel -->
-        <div class="quick-actions" id="quickActions">
-            <button class="quick-btn" id="scrollTopBtn">
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            <button class="quick-btn" id="quickSearchBtn">
-                <i class="fas fa-search"></i>
-            </button>
-            <button class="quick-btn" id="quickExportBtn">
-                <i class="fas fa-download"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Help Modal -->
-    <div class="modal" id="helpModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-question-circle"></i> Help & Instructions</h3>
-                <button class="modal-close" id="closeHelp">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="help-section">
-                    <h4>Getting Started</h4>
-                    <p>1. Place your <code>bbc.csv</code> file in the same folder as this HTML file</p>
-                    <p>2. Click "Auto Load BBC Data" to automatically load the CSV file</p>
-                    <p>3. Use the search interface to find specific records</p>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-database"></i>
+                    <span>BBC Data Search System</span>
                 </div>
-                <div class="help-section">
-                    <h4>CSV Format Requirements</h4>
-                    <pre>UserID,Number,Branch,Status
-USER001,12345,Main Branch,Active
-USER002,12346,North Branch,Inactive</pre>
-                    <p>Your CSV must have these exact column names (case-insensitive)</p>
-                </div>
-                <div class="help-section">
-                    <h4>Search Methods</h4>
-                    <ul>
-                        <li><strong>Multiple IDs:</strong> Enter multiple UserIDs separated by commas or new lines</li>
-                        <li><strong>Single ID:</strong> Search for one specific UserID</li>
-                        <li><strong>By Number:</strong> Search by phone number or identifier</li>
-                        <li><strong>Advanced:</strong> Combine filters for precise results</li>
-                    </ul>
+                <div class="footer-info">
+                    <p>© 2023 BBC Data Solutions. All rights reserved.</p>
+                    <p class="footer-links">
+                        <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                        <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+                        <a href="#"><i class="fas fa-envelope"></i> Contact Support</a>
+                    </p>
                 </div>
             </div>
         </div>
-    </div>
+    </footer>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loader">
-            <div class="loader-spinner"></div>
-            <h3 id="loadingText">Loading BBC Data...</h3>
-            <p id="loadingSubtext">Please wait while we process your CSV file</p>
-            <div class="loader-progress" id="loaderProgress">
-                <div class="progress-bar"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification Container -->
-    <div class="notification-container" id="notificationContainer"></div>
-
-    <!-- JavaScript -->
+    <!-- Include SheetJS library for Excel file reading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
