@@ -89,82 +89,78 @@
             </div>
         </section>
 
-        <section class="main-search-section">
-            <div class="search-header">
-                <h2><i class="fas fa-search"></i> Search Your Data</h2>
-                <p>Use the search box in the header or the advanced search options below</p>
+        <section class="quick-search-section">
+            <div class="section-header">
+                <h3><i class="fas fa-bolt"></i> Quick Search Examples</h3>
+                <p>Click any number or User ID to search instantly</p>
             </div>
             
-            <div class="search-options-container">
-                <div class="search-type-selector">
-                    <h4><i class="fas fa-filter"></i> Search Type</h4>
-                    <div class="search-type-options">
-                        <label class="search-type-option">
-                            <input type="radio" name="searchType" value="all" checked>
-                            <div class="option-content">
-                                <i class="fas fa-search"></i>
-                                <span>Search All Fields</span>
-                            </div>
-                        </label>
-                        
-                        <label class="search-type-option">
-                            <input type="radio" name="searchType" value="number">
-                            <div class="option-content">
-                                <i class="fas fa-phone"></i>
-                                <span>Phone Number Only</span>
-                            </div>
-                        </label>
-                        
-                        <label class="search-type-option">
-                            <input type="radio" name="searchType" value="userid">
-                            <div class="option-content">
-                                <i class="fas fa-id-card"></i>
-                                <span>User ID Only</span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="quick-search-tags">
-                    <h4><i class="fas fa-bolt"></i> Quick Search</h4>
-                    <p>Click any tag to search instantly</p>
+            <div class="quick-search-tags">
+                <div class="tag-category">
+                    <h4>Phone Numbers</h4>
                     <div class="tags-container">
                         <span class="search-tag" data-search="91600000000">91600000000</span>
                         <span class="search-tag" data-search="91777777777">91777777777</span>
                         <span class="search-tag" data-search="91888888888">91888888888</span>
+                        <span class="search-tag" data-search="91999999999">91999999999</span>
+                        <span class="search-tag" data-search="91555555555">91555555555</span>
+                    </div>
+                </div>
+                
+                <div class="tag-category">
+                    <h4>User IDs</h4>
+                    <div class="tags-container">
                         <span class="search-tag" data-search="bbc1234">bbc1234</span>
                         <span class="search-tag" data-search="bbc5678">bbc5678</span>
                         <span class="search-tag" data-search="bbc9012">bbc9012</span>
+                        <span class="search-tag" data-search="bbc3456">bbc3456</span>
+                        <span class="search-tag" data-search="bbc7890">bbc7890</span>
                     </div>
                 </div>
             </div>
+        </section>
+        
+        <section class="instructions-section">
+            <div class="section-header">
+                <h3><i class="fas fa-info-circle"></i> How to Use This System</h3>
+            </div>
             
-            <div class="search-instructions">
-                <div class="instruction">
-                    <i class="fas fa-upload"></i>
-                    <div>
-                        <h5>Step 1: Upload Data</h5>
-                        <p>Click "Upload Data" in the header to upload your CSV or Excel file</p>
+            <div class="instructions-grid">
+                <div class="instruction-card">
+                    <div class="instruction-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <div class="instruction-content">
+                        <h4>1. Upload Your Data</h4>
+                        <p>Click "Upload Data" in the header to upload your CSV or Excel file with UserID, Number, Branch, and Status columns.</p>
                     </div>
                 </div>
-                <div class="instruction">
-                    <i class="fas fa-search"></i>
-                    <div>
-                        <h5>Step 2: Search Data</h5>
-                        <p>Use the search box in the header or quick tags above</p>
+                
+                <div class="instruction-card">
+                    <div class="instruction-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="instruction-content">
+                        <h4>2. Search Your Data</h4>
+                        <p>Use the search box in the header to search by phone number (91600000000) or User ID (bbc1234).</p>
+                        <p class="note">You can also click any quick search tag above.</p>
                     </div>
                 </div>
-                <div class="instruction">
-                    <i class="fas fa-download"></i>
-                    <div>
-                        <h5>Step 3: Export Results</h5>
-                        <p>Export your search results as CSV for further analysis</p>
+                
+                <div class="instruction-card">
+                    <div class="instruction-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="instruction-content">
+                        <h4>3. Export Results</h4>
+                        <p>Export your search results as CSV for further analysis. Results show all User IDs associated with the searched number.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="results-section">
+        <!-- Results Section - Initially Hidden -->
+        <section class="results-section hidden">
             <div class="results-header">
                 <h3><i class="fas fa-poll"></i> Search Results</h3>
                 <div class="results-count">
@@ -173,71 +169,41 @@
                 </div>
             </div>
             
-            <div class="results-table-container">
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th>UserID</th>
-                            <th>Number</th>
-                            <th>Branch</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultsTableBody">
-                        <!-- Results will be populated here by JavaScript -->
-                    </tbody>
-                </table>
+            <div class="results-content">
+                <!-- Results Table (shown when data found) -->
+                <div class="results-table-container hidden">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>UserID</th>
+                                <th>Number</th>
+                                <th>Branch</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsTableBody">
+                            <!-- Results will be populated here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
                 
+                <!-- No Results Message (shown when no data found) -->
                 <div class="no-results" id="noResultsMessage">
                     <i class="fas fa-search"></i>
-                    <p id="noResultsText">Upload a CSV/Excel file and search for data</p>
+                    <p id="noResultsText">No matching records found</p>
                 </div>
-            </div>
-            
-            <div class="results-actions">
-                <button class="action-btn export-btn">
-                    <i class="fas fa-file-export"></i> Export Results
-                </button>
-                <button class="action-btn clear-btn">
-                    <i class="fas fa-eraser"></i> Clear Results
-                </button>
-                <button class="action-btn refresh-btn" id="refreshSearchBtn">
-                    <i class="fas fa-redo"></i> Refresh Search
-                </button>
-            </div>
-        </section>
-        
-        <section class="sample-data-section">
-            <div class="sample-header">
-                <h3><i class="fas fa-download"></i> Need Sample Data?</h3>
-                <p>Download this sample CSV file to see the correct format for uploading</p>
-            </div>
-            <div class="sample-actions">
-                <button id="downloadSampleBtn" class="sample-btn">
-                    <i class="fas fa-file-csv"></i> Download Sample CSV
-                </button>
-                <div class="format-info">
-                    <h4>Required Format:</h4>
-                    <div class="format-preview">
-                        <div class="format-row">
-                            <span class="format-col">UserID</span>
-                            <span class="format-col">Number</span>
-                            <span class="format-col">Branch</span>
-                            <span class="format-col">Status</span>
-                        </div>
-                        <div class="format-row data-row">
-                            <span class="format-col">bbc1234</span>
-                            <span class="format-col">91600000000</span>
-                            <span class="format-col">Mumbai Central</span>
-                            <span class="format-col">Active</span>
-                        </div>
-                        <div class="format-row data-row">
-                            <span class="format-col">bbc1235</span>
-                            <span class="format-col">91600000000</span>
-                            <span class="format-col">Delhi North</span>
-                            <span class="format-col">Active</span>
-                        </div>
-                    </div>
+                
+                <!-- Results Actions (shown when data found) -->
+                <div class="results-actions hidden">
+                    <button class="action-btn export-btn">
+                        <i class="fas fa-file-export"></i> Export Results
+                    </button>
+                    <button class="action-btn clear-btn">
+                        <i class="fas fa-eraser"></i> Clear Results
+                    </button>
+                    <button class="action-btn refresh-btn" id="refreshSearchBtn">
+                        <i class="fas fa-redo"></i> Refresh Search
+                    </button>
                 </div>
             </div>
         </section>
@@ -251,7 +217,7 @@
                     <span>BBC Data Search System</span>
                 </div>
                 <div class="footer-info">
-                    <p>© 2023 BBC Data Solutions. All rights reserved.</p>
+                    <p>© 2026 BBC Data Solutions. All rights reserved.</p>
                     <p class="footer-links">
                         <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
                         <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
