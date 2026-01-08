@@ -9,10 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const headerRecordCount = document.getElementById('headerRecordCount');
     const headerClearFileBtn = document.getElementById('headerClearFileBtn');
     
-    // Elements - Main
+    // Elements - Results Section
+    const resultsSection = document.querySelector('.results-section');
     const resultsTableBody = document.getElementById('resultsTableBody');
+    const resultsTableContainer = document.querySelector('.results-table-container');
     const noResultsMessage = document.getElementById('noResultsMessage');
     const noResultsText = document.getElementById('noResultsText');
+    const resultsActions = document.querySelector('.results-actions');
     const exportBtn = document.querySelector('.export-btn');
     const clearBtn = document.querySelector('.clear-btn');
     const refreshSearchBtn = document.getElementById('refreshSearchBtn');
@@ -21,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalRecords = document.getElementById('totalRecords');
     const activeUsers = document.getElementById('activeUsers');
     const totalBranches = document.getElementById('totalBranches');
-    const downloadSampleBtn = document.getElementById('downloadSampleBtn');
     
     // Search tags
     const searchTags = document.querySelectorAll('.search-tag');
@@ -33,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastSearchTerm = '';
     
     // Initialize
-    clearResults();
     updateStats();
     
     // Setup search tag click handlers
@@ -82,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
         headerFileInfo.style.display = 'none';
         headerFileName.textContent = 'No file uploaded';
         headerRecordCount.textContent = '0 records';
-        clearResults();
+        hideResultsSection();
         updateStats();
         showNotification('Uploaded data cleared successfully', 'info');
     });
@@ -98,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Clear results functionality
-    clearBtn.addEventListener('click', clearResults);
+    clearBtn.addEventListener('click', hideResultsSection);
     
     // Refresh search functionality
     refreshSearchBtn.addEventListener('click', function() {
@@ -108,11 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             showNotification('No previous search to refresh', 'info');
         }
-    });
-    
-    // Download sample CSV
-    downloadSampleBtn.addEventListener('click', function() {
-        downloadSampleCSV();
     });
     
     // Function to read uploaded file (CSV or Excel)
@@ -324,68 +320,100 @@ document.addEventListener('DOMContentLoaded', function() {
         lastSearchTerm = searchTerm;
         
         // Show loading state on header search button
+        const originalContent = headerSearchBtn.innerHTML;
         headerSearchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         headerSearchBtn.disabled = true;
         
-        // Get search type
-        const searchType = document.querySelector('input[name="searchType"]:checked').value;
-        
         // Simulate API call delay
         setTimeout(() => {
-            // Filter data based on search term and type
+            // Filter data based on search term (search in both number and userId)
             const filteredResults = uploadedData.filter(item => {
                 const searchLower = searchTerm.toLowerCase();
                 
-                if (searchType === 'number') {
-                    // Search in number only
-                    return item.number.includes(searchTerm);
-                } else if (searchType === 'userid') {
-                    // Search in userId only
-                    return item.userId.toLowerCase().includes(searchLower);
-                } else {
-                    // Search in both number and userId
-                    return item.number.includes(searchTerm) || 
-                           item.userId.toLowerCase().includes(searchLower);
-                }
+                // Search in both number and userId
+                return item.number.includes(searchTerm) || 
+                       item.userId.toLowerCase().includes(searchLower);
             });
             
             // Store current results for export
             currentResults = filteredResults;
             
-            // Display results
-            displayResults(filteredResults);
+            // Show results section
+            showResultsSection();
             
             // Update results count
             updateResultsCount(filteredResults.length);
             
-            // Reset search button
-            headerSearchBtn.innerHTML = '<i class="fas fa-search"></i>';
-            headerSearchBtn.disabled = false;
-            
-            // Show notification based on results
+            // Show/hide table and actions based on results
             if (filteredResults.length > 0) {
+                // Display results in table
+                displayResults(filteredResults);
+                
+                // Show table and actions, hide no results message
+                resultsTableContainer.classList.remove('hidden');
+                resultsTableContainer.classList.add('visible');
+                resultsActions.classList.remove('hidden');
+                resultsActions.classList.add('visible');
+                noResultsMessage.classList.remove('visible');
+                noResultsMessage.classList.add('hidden');
+                
                 showNotification(`Found ${filteredResults.length} matching records for "${searchTerm}"`, 'success');
             } else {
+                // Clear table
+                resultsTableBody.innerHTML = '';
+                
+                // Hide table and actions, show no results message
+                resultsTableContainer.classList.remove('visible');
+                resultsTableContainer.classList.add('hidden');
+                resultsActions.classList.remove('visible');
+                resultsActions.classList.add('hidden');
+                noResultsMessage.classList.remove('hidden');
+                noResultsMessage.classList.add('visible');
+                
+                noResultsText.textContent = `No matching records found for "${searchTerm}"`;
                 showNotification(`No matching records found for "${searchTerm}"`, 'info');
             }
+            
+            // Reset search button
+            headerSearchBtn.innerHTML = originalContent;
+            headerSearchBtn.disabled = false;
         }, 300);
     }
     
-    // Clear results
-    function clearResults() {
-        resultsTableBody.innerHTML = '';
-        currentResults = [];
-        lastSearchTerm = '';
-        noResultsMessage.style.display = 'block';
+    // Show results section
+    function showResultsSection() {
+        resultsSection.classList.remove('hidden');
+        resultsSection.classList.add('visible');
         
-        if (uploadedData.length === 0) {
-            noResultsText.textContent = 'Upload a CSV/Excel file and search for data';
-        } else {
-            noResultsText.textContent = 'No search results yet. Use the search box in the header.';
-        }
+        // Scroll to results section smoothly
+        setTimeout(() => {
+            resultsSection.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }, 100);
+    }
+    
+    // Hide results section
+    function hideResultsSection() {
+        resultsSection.classList.remove('visible');
+        resultsSection.classList.add('hidden');
+        
+        // Clear search input
+        headerSearchInput.value = '';
+        lastSearchTerm = '';
+        currentResults = [];
+        
+        // Reset all elements
+        resultsTableBody.innerHTML = '';
+        resultsTableContainer.classList.remove('visible');
+        resultsTableContainer.classList.add('hidden');
+        resultsActions.classList.remove('visible');
+        resultsActions.classList.add('hidden');
+        noResultsMessage.classList.remove('visible');
+        noResultsMessage.classList.add('hidden');
         
         updateResultsCount(0);
-        headerSearchInput.value = '';
         showNotification('Results cleared', 'info');
     }
     
@@ -394,12 +422,8 @@ document.addEventListener('DOMContentLoaded', function() {
         resultsTableBody.innerHTML = '';
         
         if (results.length === 0) {
-            noResultsMessage.style.display = 'block';
-            noResultsText.textContent = 'No matching records found';
             return;
         }
-        
-        noResultsMessage.style.display = 'none';
         
         results.forEach(item => {
             const row = document.createElement('tr');
@@ -486,31 +510,6 @@ document.addEventListener('DOMContentLoaded', function() {
         showNotification(`Exported ${data.length} records as CSV`, 'success');
     }
     
-    // Download sample CSV
-    function downloadSampleCSV() {
-        const sampleData = `UserID,Number,Branch,Status
-bbc1234,91600000000,Mumbai Central,Active
-bbc1235,91600000000,Delhi North,Active
-bbc1236,91777777777,Bangalore South,Active
-bbc1237,91888888888,Chennai East,Inactive
-bbc1238,91999999999,Kolkata West,Pending
-bbc5678,91600000000,Pune West,Active
-bbc5679,91777777777,Hyderabad,Active
-bbc5680,91888888888,Jaipur,Inactive`;
-        
-        const blob = new Blob([sampleData], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'bbc_sample_data.csv';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-        showNotification('Sample CSV downloaded successfully', 'success');
-    }
-    
     // Notification system
     function showNotification(message, type) {
         // Remove existing notifications
@@ -592,6 +591,16 @@ bbc5680,91888888888,Jaipur,Inactive`;
                 color: #888;
                 font-size: 1rem;
                 margin-left: 15px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 24px;
+                height: 24px;
+            }
+            
+            .notification-close:hover {
+                color: #333;
             }
             
             @keyframes slideIn {
@@ -604,6 +613,17 @@ bbc5680,91888888888,Jaipur,Inactive`;
                     opacity: 1;
                 }
             }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
         `;
         
         document.head.appendChild(style);
@@ -612,8 +632,12 @@ bbc5680,91888888888,Jaipur,Inactive`;
         notification.querySelector('.notification-close').addEventListener('click', function() {
             notification.style.animation = 'slideOut 0.3s ease';
             setTimeout(() => {
-                notification.remove();
-                style.remove();
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+                if (style.parentNode) {
+                    style.remove();
+                }
             }, 250);
         });
         
@@ -622,26 +646,14 @@ bbc5680,91888888888,Jaipur,Inactive`;
             if (notification.parentNode) {
                 notification.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => {
-                    notification.remove();
-                    style.remove();
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                    if (style.parentNode) {
+                        style.remove();
+                    }
                 }, 250);
             }
         }, 5000);
     }
-    
-    // Add slideOut animation
-    const slideOutStyle = document.createElement('style');
-    slideOutStyle.textContent = `
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(slideOutStyle);
 });
